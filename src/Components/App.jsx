@@ -1,4 +1,5 @@
 import React from 'react'
+import '../Styles/Components/App.css'
 
 function App() {
     return (
