@@ -1,28 +1,47 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import AppContext from '../Context/AppContext'
 import '../Styles/Components/Checkout.css'
 
 function Checkout() {
+    const { state, removeFromCart } = useContext(AppContext);
+    const { cart } = state;
+
+    const handleRemove = product => () => {
+        removeFromCart(product);
+    }
+
+    const handleSumTotal = () => {
+        const reducer = (acumulator, currentValue) => acumulator + currentValue.price;
+        const sum = cart.reduce(reducer, 0);
+
+        return sum;
+    }
+
     return (
         <div className="Checkout">
             <div className="Checkout-content">
-                <h3>Lista de Pedidos:</h3>
-                <div className="Checkout-item">
-                    <div className="Checkout-element">
-                        <h4>ITEM name</h4>
-                        <span>$10</span>
+                {cart.length > 0 ? <h3>Lista de Pedidos:</h3> : <h3>Sin pedidos...</h3>}
+                {cart.map((item) => (
+                    <div className="Checkout-item">
+                        <div className="Checkout-element">
+                            <h4>{item.title}</h4>
+                            <span>$ {item.price}</span>
+                        </div>
+                        <button type="button" onClick={handleRemove(item)} >
+                            <i className="fas fa-trash-alt fa-lg"></i>
+                        </button>
                     </div>
-                    <button>
-                        <i className="fas fa-trash-alt fa-lg"></i>
-                    </button>
+                ))}
+            </div>
+            {cart.length > 0 && (
+                <div className="Checkout-sidebar">
+                    <h3>{`Precio total: $ ${handleSumTotal()}`}</h3>
+                    <Link to="/checkout/information">
+                        <button type="button">Continuar pedido</button>
+                    </Link>
                 </div>
-            </div>
-            <div className="Checkout-sidebar">
-                <h3>Precio total: $10</h3>
-                <Link to="/checkout/information">
-                    <button type="button">Continuar pedido</button>
-                </Link>
-            </div>
+            )}
         </div>
     )
 }
