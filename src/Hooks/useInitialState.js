@@ -2,26 +2,26 @@ import React, { useState } from 'react'
 import initialState from '../initialState'
 
 function useInitialState() {
-    const [carrito, setCarrito] = useState(initialState);
+    const [state, setState] = useState(initialState);
 
     const addToCart = payload => {
-        setCarrito({
-            ...carrito,
-            cart:[...carrito.cart, payload]
+        setState({
+            ...state,
+            cart:[...state.cart, payload]
         })
     }
 
     const removeFromCart = payload => {
-        setCarrito({
-            ...carrito,
-            cart: carrito.cart.filter(items=>items.id !== payload.id)
+        setState({
+            ...state,
+            cart: state.cart.filter(items=>items.id !== payload.id)
         })
     }
 
     return {
         addToCart,
         removeFromCart,
-        carrito,
+        state,
     }
 }
 
